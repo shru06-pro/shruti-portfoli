@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, ArrowUpRight, Github, Linkedin } from 'lucide-react';
+import { FileText, ArrowUpRight, Github, Linkedin } from 'lucide-react';
 import { content } from '@/data/content';
 import { Hero3D } from './Hero3D';
 import { Magnetic } from './Magnetic';
 import { Sparkle } from './Sparkle';
+import { ResumeModal } from './ResumeModal';
 import { easeOutExpo } from '@/lib/animations';
 
 
 export function Hero() {
+  const [resumeOpen, setResumeOpen] = useState(false);
   const headline = content.headline.text;
   const italicWord = content.headline.italicWord;
   const parts = headline.split(`*${italicWord}*`);
@@ -127,10 +130,16 @@ export function Hero() {
               </a>
             </Magnetic>
             <Magnetic strength={0.2}>
-              <a href={content.contact.resume} download className="pill-outline focus-ring">
-                <Download size={16} />
+              <button
+                type="button"
+                onClick={() => setResumeOpen(true)}
+                className="pill-outline focus-ring"
+                data-cursor="hover"
+                aria-label="Preview and download resume"
+              >
+                <FileText size={16} />
                 Resume
-              </a>
+              </button>
             </Magnetic>
             <div className="flex gap-2">
               <Magnetic strength={0.4}>
@@ -164,6 +173,13 @@ export function Hero() {
           <Hero3D className="w-full max-w-md" />
         </div>
       </div>
+
+      {/* Resume Preview Modal */}
+      <ResumeModal
+        isOpen={resumeOpen}
+        onClose={() => setResumeOpen(false)}
+        resumeUrl={content.contact.resume}
+      />
     </section>
   );
 }
